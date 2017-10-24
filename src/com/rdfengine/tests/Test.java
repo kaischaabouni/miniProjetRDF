@@ -1,4 +1,4 @@
-package com.rdfengine.test;
+package com.rdfengine.tests;
 
 public class Test {
 
