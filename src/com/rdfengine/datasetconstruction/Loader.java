@@ -8,8 +8,6 @@ import com.rdfengine.models.Triplet;
 
 public abstract class Loader {
 
-	//public static String filePath = "assets/datasets/500K.rdf";
-
 	public static void loadData(String filePath)
 	{
 		String line = null;
@@ -23,8 +21,9 @@ public abstract class Loader {
 
 			while ((line = bufferedReader.readLine()) != null) {
 				tripletString += line;
-				if(!line.endsWith("."))
+				if(!line.endsWith(".")){
 					continue;
+				}
 				currentTriplet = new Triplet();
 
 				//removing trailing
