@@ -1,19 +1,33 @@
 package com.rdfengine;
 
+import com.rdfengine.models.RDFDictionary;
+
 public class RDFEngine {
 
+
+
+	
 	public static void main(String[] args) {
 		
-		if(args.length > 0){
-			// Command line: java RDFEngine <doc.rdf> <directory of queries>
+		/**
+		 * 
+		 * For command line run, specify 2 arguments:
+		 * - the interrogated file
+		 * - the directory containing a set of queries
+		 * 
+		 * Example:
+		 * java RDFEngine args[0]:<doc.rdf> args[1]:<directory of queries>
+		 * 
+		 */
 
-		} else {
-			// No parameters specified in command line
-			
-			// Execute University Queries
-			
-		}
-
+		// Add data to Dictionary from 
+		RDFDictionary dictionary = RDFDictionary.getInstance();
+		String filename = "University0_0.nt";
+		dictionary.addRDFValuesFromFile("assets/datasets/" + filename);
+		
+		// Execute University Queries
+		
+		
 	}
 
 }
