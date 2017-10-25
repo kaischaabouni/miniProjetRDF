@@ -38,9 +38,9 @@ public final class RDFDictionary{
 
 	// Add new Resource
 	public void addResource(String resource) {	
-		lastId++;
 		resourceToId.put(resource, lastId);
 		idToResource.put(lastId, resource);
+		lastId++;
 	}
 
 	// get Resource by ID
