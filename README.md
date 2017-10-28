@@ -2,5 +2,5 @@
 Mini moteur de requêtes RDF
 
 ## Setup
-- git clone 
+- git clone https://github.com/kaischaabouni/miniProjetRDF.git
 - add Jena library
