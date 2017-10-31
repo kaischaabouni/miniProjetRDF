@@ -2,9 +2,9 @@ package com.rdfengine.models;
 
 import java.util.HashMap;
 
-public final class RDFDictionary{
+public final class Dictionary{
 
-	private static volatile RDFDictionary instance = null;
+	private static volatile Dictionary instance = null;
 
 	// Dictionary
 	private HashMap<String, Integer> resourceToId = new HashMap<String, Integer> ();
@@ -14,7 +14,7 @@ public final class RDFDictionary{
 	private int lastId = 0;
 
 	// Private constructor so that it cannot be instantiated outside
-	private RDFDictionary() {
+	private Dictionary() {
 		super();
 	}
 
@@ -22,18 +22,18 @@ public final class RDFDictionary{
 	/**
 	 * @return Return the instance of the singleton Dictionary.
 	 */
-	public final static RDFDictionary getInstance() {
+	public final static Dictionary getInstance() {
 
 		// Instantiate if not yet instantiated
-		if (RDFDictionary.instance == null) {
+		if (Dictionary.instance == null) {
 			// Prevent multiple instantiation
-			synchronized(RDFDictionary.class) {
-				if (RDFDictionary.instance == null) {
-					RDFDictionary.instance = new RDFDictionary();
+			synchronized(Dictionary.class) {
+				if (Dictionary.instance == null) {
+					Dictionary.instance = new Dictionary();
 				}
 			}
 		}
-		return RDFDictionary.instance;
+		return Dictionary.instance;
 	}
 
 	// Add new Resource
