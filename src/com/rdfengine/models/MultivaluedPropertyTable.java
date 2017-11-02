@@ -14,7 +14,7 @@ public class MultivaluedPropertyTable extends PropertyTable {
 		subjectToObjects = new HashMap<Integer, TreeSet<Integer>>();
 		objectsToSubjects = new HashMap<Integer, TreeSet<Integer>>();
 	}
-//aaaa
+
 	public void addSubjectAndObject(Integer subject, Integer object){
 
 		if(subjectToObjects.containsKey(subject)){
