@@ -14,7 +14,7 @@ public final class Dictionary{
 	private int lastId = 0;
 
 	// Private constructor so that it cannot be instantiated outside
-	private Dictionary() {
+	private Dictionary() {// constructor
 		super();
 	}
 
