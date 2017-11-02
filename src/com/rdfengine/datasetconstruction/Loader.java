@@ -3,7 +3,7 @@ package com.rdfengine.datasetconstruction;
 import java.io.BufferedReader;
 import java.io.FileReader;
 
-import com.rdfengine.models.RDFDictionary;
+import com.rdfengine.models.Dictionary;
 import com.rdfengine.models.Triplet;
 
 public abstract class Loader {
@@ -33,11 +33,11 @@ public abstract class Loader {
 				split = tripletString.split("\t");
 				for(int i=0; i<3; i++) {
 					currentResource = split[i];
-					if(!RDFDictionary.getInstance().containsResource(currentResource)) {
-						RDFDictionary.getInstance().addResource(currentResource);
-						currentResourceValue = RDFDictionary.getInstance().getLastId()-1;
+					if(!Dictionary.getInstance().containsResource(currentResource)) {
+						Dictionary.getInstance().addResource(currentResource);
+						currentResourceValue = Dictionary.getInstance().getLastId()-1;
 					} else {
-						currentResourceValue = RDFDictionary.getInstance().getId(currentResource);
+						currentResourceValue = Dictionary.getInstance().getId(currentResource);
 					}
 					currentTriplet.setNext(currentResourceValue);
 					tripletString = "";
