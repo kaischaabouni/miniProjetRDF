@@ -1,5 +1,7 @@
 package com.rdfengine;
 
+import com.hp.hpl.jena.query.Query;
+import com.hp.hpl.jena.query.QueryFactory;
 import com.rdfengine.datasetconstruction.Loader;
 import com.rdfengine.query.QueryManager;
 
@@ -27,13 +29,20 @@ public class RDFEngine {
 		long startTime = System.currentTimeMillis();
 		Loader.loadData(filePath);
 		long endLoadTime = System.currentTimeMillis();
-		System.out.println("Loading Dataset Time : " + ((endLoadTime - startTime) / 1000) + " s");
 		
 		/*
 		 *  Execute Queries
 		 */
 		QueryManager.executeQueriesFromDirectoryPath(queriesDirecoryPath);
+//		String q = "SELECT ?v0 WHERE {"
+//			+ "?v0 <http://purl.org/dc/terms/Location> <http://db.uwaterloo.ca/~galuc/wsdbm/City0> . "
+//			+ "	?v0 <http://schema.org/nationality> <http://db.uwaterloo.ca/~galuc/wsdbm/Country3> . "
+//			+ "	?v0 <http://db.uwaterloo.ca/~galuc/wsdbm/gender> <http://db.uwaterloo.ca/~galuc/wsdbm/Gender1> . }";
+//
+//		Query query = QueryFactory.create(q);
+//		QueryManager.executeQuery(query);
 		long endQueryTime = System.currentTimeMillis();
+		System.out.println("Loading Dataset Time : " + ((endLoadTime - startTime) / 1000) + " s");
 		System.out.println("Query and Display Time : " + ((endQueryTime - endLoadTime) / 1000) + " s");
 	}
 
