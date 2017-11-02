@@ -1,16 +1,39 @@
 package com.rdfengine.models;
 
-import java.util.HashMap;
+public abstract class PropertyTable {
 
-public class PropertyTable {
-	
-	//
-	HashMap<Integer, Integer> propertyTable;
-
-	
-	public void addSubjectObject(int subject, int object) {
+	/*
+	 * 
+	 */
+	public boolean containsSubject(int subject) {
 		// TODO Auto-generated method stub
-		
+		return true;
 	}
-	
+
+	/*
+	 * 
+	 */
+	public boolean containsObject(int object) {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	/*
+	 * 
+	 */
+	public boolean getSubject(int subject) {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	/*
+	 * 
+	 */
+	public boolean getObjectBySubjectID(int subjectID) {
+		// TODO Auto-generated method stub
+		return true;
+	}	
+
+
+
 }
