@@ -37,7 +37,7 @@ public final class Dictionary{
 	}
 
 	// Add new Resource
-	public void addResource(String resource) {	
+	public void addResource(String resource) {
 		resourceToId.put(resource, lastId);
 		idToResource.put(lastId, resource);
 		lastId++;

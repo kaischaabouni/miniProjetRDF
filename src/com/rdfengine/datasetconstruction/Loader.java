@@ -2,47 +2,47 @@ package com.rdfengine.datasetconstruction;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-
+import com.rdfengine.models.AllProperties;
 import com.rdfengine.models.Dictionary;
-import com.rdfengine.models.Triplet;
 
 public abstract class Loader {
 
-	public static void loadData(String filePath)
-	{
+	public static void loadData(String filePath) {
+		Dictionary dictionary = Dictionary.getInstance();
 		String line = null;
-		String currentResource;
-		Triplet currentTriplet;
 		String tripletString = "";
-		int currentResourceValue;
 		try {
 			BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath));
-			String[] split = new String[3];
+			String[] splittedTrippleString = new String[3];
 
 			while ((line = bufferedReader.readLine()) != null) {
+				
+				// Stock Next triple in tripletString
 				tripletString += line;
 				if(!line.endsWith(".")){
 					continue;
 				}
-				currentTriplet = new Triplet();
 
-				//removing trailing
+				// Rremoving trailing
 				while(!tripletString.endsWith("\"") && !tripletString.endsWith(">")){
 					tripletString = tripletString.substring(0, tripletString.length()-1);
 				}
-				split = tripletString.split("\t");
-				for(int i=0; i<3; i++) {
-					currentResource = split[i];
-					if(!Dictionary.getInstance().containsResource(currentResource)) {
-						Dictionary.getInstance().addResource(currentResource);
-						currentResourceValue = Dictionary.getInstance().getLastId()-1;
-					} else {
-						currentResourceValue = Dictionary.getInstance().getId(currentResource);
-					}
-					currentTriplet.setNext(currentResourceValue);
-					tripletString = "";
+				
+				// Split tripletString to Subject, Predicate and Object
+				splittedTrippleString = tripletString.split("\t");
+				
+				// Add Subject, Predicate and Object to Dictionary, AllProperties and AllSubjects
+				for(int i=0; i < splittedTrippleString.length; i++) {
+					if(!dictionary.containsResource(splittedTrippleString[i])) {
+						dictionary.addResource(splittedTrippleString[i]);
+					}					
 				}
-				Triplets.addTriplet(currentTriplet);
+				
+				//######## add in if ou after for
+				int subjectID = dictionary.getId(splittedTrippleString[0]);
+				int predicateID = dictionary.getId(splittedTrippleString[1]);
+				int objectID = dictionary.getId(splittedTrippleString[2]);
+				AllProperties.addTriple(subjectID, predicateID, objectID);
 			}
 			bufferedReader.close();
 
