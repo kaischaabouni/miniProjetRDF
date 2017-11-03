@@ -2,8 +2,6 @@ package com.rdfengine.datasetconstruction;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-import com.rdfengine.models.AllProperties;
-import com.rdfengine.models.Dictionary;
 
 public abstract class Loader {
 

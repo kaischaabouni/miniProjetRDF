@@ -1,4 +1,4 @@
-package com.rdfengine.models;
+package com.rdfengine.triplets;
 
 public class Triplet {
 

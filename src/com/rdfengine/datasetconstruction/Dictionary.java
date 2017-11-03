@@ -1,4 +1,4 @@
-package com.rdfengine.models;
+package com.rdfengine.datasetconstruction;
 
 import java.util.HashMap;
 

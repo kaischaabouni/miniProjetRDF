@@ -1,8 +1,6 @@
-package com.rdfengine.datasetconstruction;
+package com.rdfengine.triplets;
 
 import java.util.ArrayList;
-
-import com.rdfengine.models.Triplet;
 
 public abstract class Triplets {
 

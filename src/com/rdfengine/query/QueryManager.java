@@ -11,9 +11,9 @@ import com.hp.hpl.jena.sparql.core.TriplePath;
 import com.hp.hpl.jena.sparql.syntax.ElementPathBlock;
 import com.hp.hpl.jena.sparql.syntax.ElementVisitorBase;
 import com.hp.hpl.jena.sparql.syntax.ElementWalker;
-import com.rdfengine.datasetconstruction.Triplets;
-import com.rdfengine.models.Dictionary;
-import com.rdfengine.models.Triplet;
+import com.rdfengine.datasetconstruction.Dictionary;
+import com.rdfengine.triplets.Triplet;
+import com.rdfengine.triplets.Triplets;
 
 public class QueryManager {
 

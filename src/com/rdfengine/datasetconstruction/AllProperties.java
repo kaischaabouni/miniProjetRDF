@@ -1,6 +1,9 @@
-package com.rdfengine.models;
+package com.rdfengine.datasetconstruction;
 
 import java.util.HashMap;
+
+import com.rdfengine.models.MultivaluedPropertyTable;
+import com.rdfengine.models.PropertyTable;
 
 public abstract class AllProperties {
 	

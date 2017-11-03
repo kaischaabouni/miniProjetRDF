@@ -1,9 +1,9 @@
 package com.rdfengine;
 
+import com.rdfengine.datasetconstruction.Dictionary;
 import com.rdfengine.datasetconstruction.Loader;
-import com.rdfengine.datasetconstruction.Triplets;
-import com.rdfengine.models.Dictionary;
 import com.rdfengine.models.MultivaluedPropertyTable;
+import com.rdfengine.triplets.Triplets;
 
 public class Test {
 
