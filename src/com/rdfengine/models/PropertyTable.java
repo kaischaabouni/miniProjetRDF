@@ -5,7 +5,7 @@ public abstract class PropertyTable {
 	/*
 	 * Add Subject and Object
 	 */
-	public abstract void addTripletToPropertyTable(Integer subject, Integer object);
+	public abstract void addSubjectAndObjectToPropertyTable(Integer subject, Integer object);
 	
 	/*
 	 * 
