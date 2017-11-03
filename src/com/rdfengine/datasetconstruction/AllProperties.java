@@ -27,6 +27,6 @@ public abstract class AllProperties {
 		}
 		
 		// add Subject and Object to propertyTable
-		propertyTable.addTriplet(subject, object);
+		propertyTable.addTripletToPropertyTable(subject, object);
 	}	
 }

@@ -12,11 +12,11 @@ public class Test {
 //		Loader.loadData(filePath);
 //		Dictionary.getInstance().showAll(); 
 		MultivaluedPropertyTable p = new MultivaluedPropertyTable();
-		p.addTriplet(1, 2);
-		p.addTriplet(1, 3);
-		p.addTriplet(2, 4);
-		p.addTriplet(2, 4);
-		p.addTriplet(5, 2);
+		p.addTripletToPropertyTable(1, 2);
+		p.addTripletToPropertyTable(1, 3);
+		p.addTripletToPropertyTable(2, 4);
+		p.addTripletToPropertyTable(2, 4);
+		p.addTripletToPropertyTable(5, 2);
 		System.out.println(p);
 		//System.out.println(Triplets.getTriplets());
 	}

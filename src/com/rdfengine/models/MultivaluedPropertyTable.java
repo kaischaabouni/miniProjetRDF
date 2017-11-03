@@ -15,7 +15,8 @@ public class MultivaluedPropertyTable extends PropertyTable {
 		objectToSubjects = new HashMap<Integer, TreeSet<Integer>>();
 	}
 
-	public void addTriplet(Integer subject, Integer object){
+	@Override
+	public void addTripletToPropertyTable(Integer subject, Integer object){
 
 		//add in subjectToObjects
 		if(subjectToObjects.containsKey(subject)){
