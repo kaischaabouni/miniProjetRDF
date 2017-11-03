@@ -40,7 +40,7 @@ public abstract class Loader {
 				int subjectID = dictionary.getId(splittedTrippleString[0]);
 				int predicateID = dictionary.getId(splittedTrippleString[1]);
 				int objectID = dictionary.getId(splittedTrippleString[2]);
-				AllProperties.addTriple(subjectID, predicateID, objectID);
+				AllProperties.addTriplet(subjectID, predicateID, objectID);
 			}
 			bufferedReader.close();
 

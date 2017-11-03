@@ -15,7 +15,7 @@ public abstract class AllProperties {
 	/*
 	 * Add triple
 	 */
-	public static void addTriple(Integer subject, Integer predicate, Integer object){
+	public static void addTriplet(Integer subject, Integer predicate, Integer object){
 		PropertyTable propertyTable;
 		
 		// create new propertyTable or search the propertyTable if already added
