@@ -1,15 +1,13 @@
 package com.rdfengine;
 
-import com.hp.hpl.jena.query.Query;
-import com.hp.hpl.jena.query.QueryFactory;
 import com.rdfengine.loading.Loader;
 import com.rdfengine.query.QueryManager;
 
 public class RDFEngine {
 
-
-
-
+	/*
+	 * Main Program
+	 */
 	public static void main(String[] args) {
 
 		/*
@@ -22,7 +20,6 @@ public class RDFEngine {
 			queriesDirecoryPath = args[1];
 		}
 		
-
 		/*
 		 *  Load data to Dictionary from specified file
 		 */
