@@ -28,7 +28,7 @@ public abstract class Loader {
 				
 				// Split tripletString to Subject, Predicate and Object
 				splittedTrippleString = tripletString.split("\t");
-				
+				tripletString = "";
 				
 				/*
 				 *  Add Subject, Predicate and Object to Dictionary, AllProperties and AllSubjects

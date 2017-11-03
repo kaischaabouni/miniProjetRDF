@@ -27,4 +27,8 @@ public abstract class AllProperties {
 		PropertyTable propertyTable = allProperties.get(predicateID);
 		propertyTable.addSubjectAndObjectToPropertyTable(subjectID, objectID);
 	}
+
+	public static void display() {
+		System.out.println(allProperties.toString());
+	}
 }
