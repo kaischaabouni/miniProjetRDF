@@ -6,46 +6,51 @@ import java.util.TreeSet;
 public class MultivaluedPropertyTable extends PropertyTable {
 
 	private HashMap<Integer, TreeSet<Integer>> subjectToObjects;
-	private HashMap<Integer, TreeSet<Integer>> objectsToSubjects;
+	private HashMap<Integer, TreeSet<Integer>> objectToSubjects;
 	
 	
 	public MultivaluedPropertyTable() {
 		super();
 		subjectToObjects = new HashMap<Integer, TreeSet<Integer>>();
-		objectsToSubjects = new HashMap<Integer, TreeSet<Integer>>();
+		objectToSubjects = new HashMap<Integer, TreeSet<Integer>>();
 	}
 
-	public void addSubjectAndObject(Integer subject, Integer object){
+	public void addTriplet(Integer subject, Integer object){
 
+		//add in subjectToObjects
 		if(subjectToObjects.containsKey(subject)){
-			addObjectIfNotAdded(subject, object);
-			/*
-			TreeSet<Integer> treeSetObjects = subjectToObjects.get(subject);
-			if(!treeSetObjects.contains(object)){
-				// add object to subjectToObjects
-				treeSetObjects.add(object);
-				
-				// add object to objectsToSubjects
-				//objectsToSubjects.put(object, treeSetSubjects);
-
-			}
-			*/
-		} else {
-			//subjectToObjects.put(key, value)
-		}
-				
-	}
-
-	private void addObjectIfNotAdded(Integer subject, Integer object) {
-		TreeSet<Integer> treeSetObjects = subjectToObjects.get(subject);
-		if(!treeSetObjects.contains(object)){
-			// add object to subjectToObjects
-			treeSetObjects.add(object);
+//			addObjectIfNotAdded(subject, object);
 			
-			// add object to objectsToSubjects
-			//objectsToSubjects.put(object, treeSetSubjects);
+			TreeSet<Integer> treeSetObjects = subjectToObjects.get(subject);
+			if(!treeSetObjects.contains(object))//add object to the treeset
+				treeSetObjects.add(object);
 
+			else
+				return; // if the triplet already exists we quit
+			
+			
+		} else {
+			TreeSet<Integer> singleObjectTS = new TreeSet<Integer>();
+			singleObjectTS.add(object);
+			subjectToObjects.put(subject, singleObjectTS);
 		}
+		
+		
+		//add in objectToSubjects
+		if(objectToSubjects.containsKey(object))
+		{
+			
+			TreeSet<Integer> treeSetObjects = objectToSubjects.get(object);
+			//Certainly doesn't contain subject(otherwise we would've quit procedure earlier)
+			treeSetObjects.add(subject);
+		} 
+		else 
+		{
+			TreeSet<Integer> singleSubjectTS = new TreeSet<Integer>();
+			singleSubjectTS.add(subject);
+			objectToSubjects.put(object, singleSubjectTS);
+		}
+		
 	}
 
 
