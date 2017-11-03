@@ -3,37 +3,17 @@ package com.rdfengine.models;
 public abstract class PropertyTable {
 
 	/*
+	 * Add Subject and Object
+	 */
+	public abstract void addSubjectAndObject(Integer subject, Integer object);
+	
+	/*
 	 * 
 	 */
-	public boolean containsSubject(int subject) {
-		// TODO Auto-generated method stub
-		return true;
-	}
+	//public abstract boolean containsSubject(int subject);
 
 	/*
 	 * 
 	 */
-	public boolean containsObject(int object) {
-		// TODO Auto-generated method stub
-		return true;
-	}
-
-	/*
-	 * 
-	 */
-	public boolean getSubject(int subject) {
-		// TODO Auto-generated method stub
-		return true;
-	}
-
-	/*
-	 * 
-	 */
-	public boolean getObjectBySubjectID(int subjectID) {
-		// TODO Auto-generated method stub
-		return true;
-	}	
-
-
-
+	//public abstract boolean containsObject(int object);
 }
