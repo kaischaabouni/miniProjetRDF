@@ -6,4 +6,4 @@ Mini moteur de requêtes RDF
 - add Jena library
 
 ## Run
-$ rdfEngine <dataset-file> <queries-directory>
+$ rdfEngine "dataset-file" "queries-directory"
