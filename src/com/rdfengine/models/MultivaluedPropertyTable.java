@@ -55,6 +55,9 @@ public class MultivaluedPropertyTable extends PropertyTable {
 
 
 
-
+	public String toString()
+	{
+		return "subjectsToObjects: \n" + subjectToObjects + "\nobjectsToSubjects: " + objectToSubjects;
+	}
 	
 }
