@@ -209,6 +209,7 @@ public class QueryManager {
 			bufferedWriter.newLine();
 		}
 		bufferedWriter.write("---------------------------------------------------------------");
+		bufferedWriter.newLine();
 	}
 
 
