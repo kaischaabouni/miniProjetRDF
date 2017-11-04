@@ -26,6 +26,7 @@ public class QueryManager {
 	private static ArrayList<Integer> queryResult = null;
 	private static boolean queryExecutionCompleted = false;
 	private static ArrayList<TriplePatternOfStarQuery> triplePatternsList = null;
+	@SuppressWarnings("unused")
 	private static String subjectVariableName = null;
 
 	/*
