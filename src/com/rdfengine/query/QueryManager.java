@@ -1,8 +1,11 @@
 package com.rdfengine.query;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.ListIterator;
@@ -20,6 +23,8 @@ import com.rdfengine.models.TriplePatternOfStarQuery;
 
 public class QueryManager {
 
+	private static final String RESULT_FILE_NAME = "result.csv";
+
 	/*
 	 * Query Status Information
 	 */
@@ -28,7 +33,9 @@ public class QueryManager {
 	private static ArrayList<TriplePatternOfStarQuery> triplePatternsList = null;
 	private static String subjectVariableName = null;
 
-	/*
+	
+	
+	/**
 	 * Pre-Process Query extract triple patterns
 	 */
 	public static void preProcessQuery(Query query){
@@ -59,7 +66,7 @@ public class QueryManager {
 					Integer objectID = Dictionary.getInstance().getId(object);
 					TriplePatternOfStarQuery triplePatternOfStarQuery = 
 							new TriplePatternOfStarQuery(predicateID, objectID);
-					
+
 					// add TripplePatternOfStarQuery to triplePatternsList
 					triplePatternsList.add(triplePatternOfStarQuery);
 				}
@@ -68,14 +75,14 @@ public class QueryManager {
 	}
 
 
-	/*
+	/**
 	 * Execute Query 
 	 */
 	public static void executeQuery() {
-		
+
 		// initialize
 		queryResult = new ArrayList<Integer>();
-		
+
 		// Iterator for triplePatternsList
 		Iterator<TriplePatternOfStarQuery> iterator = triplePatternsList.iterator();
 
@@ -91,11 +98,12 @@ public class QueryManager {
 		queryExecutionCompleted = true;
 	}
 
-	/*
+	
+	/**
 	 * Execute first triple pattern (without join)
 	 */
 	private static void executeTriplePattern(TriplePatternOfStarQuery triplePatternOfStarQuery) {
-		
+
 		Integer predicateID = triplePatternOfStarQuery.getPredicateID();
 		Integer objectID = triplePatternOfStarQuery.getObjectID();
 
@@ -112,7 +120,8 @@ public class QueryManager {
 		}
 	}
 
-	/*
+	
+	/**
 	 * Execute a triple pattern with join
 	 */
 	private static void executeTriplePatternWithJoin(TriplePatternOfStarQuery triplePatternOfStarQuery, ArrayList<Integer> joinTable) {
@@ -120,7 +129,7 @@ public class QueryManager {
 		Integer predicateID = triplePatternOfStarQuery.getPredicateID();
 		Integer objectID = triplePatternOfStarQuery.getObjectID();
 		queryResult = new ArrayList<Integer>();
-		
+
 		// Check if property exists
 		if(AllProperties.contains(predicateID)){
 			for(Integer subjectID : joinTable){
@@ -138,8 +147,9 @@ public class QueryManager {
 			queryExecutionCompleted = true;
 		}
 	}
+
 	
-	/*
+	/**
 	 * Execute Queries in files in directory
 	 */
 	public static void executeQueriesFromDirectoryPath (String queriesDirectoryPath){
@@ -149,6 +159,7 @@ public class QueryManager {
 		for (File file : directory.listFiles()) {
 			try {
 				BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
+				BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(RESULT_FILE_NAME));
 				String line = null;
 				String sparqlQuery = "";
 				Query query;
@@ -159,20 +170,23 @@ public class QueryManager {
 						if(! sparqlQuery.isEmpty()){
 							query = QueryFactory.create(sparqlQuery);
 							sparqlQuery = "";
-							
+
 							// Pre-Process Query
 							preProcessQuery(query);
-							
+
 							// Execute Query
 							executeQuery();
-							
+
+							// Write Result in RESULT_FILE_NAME
+							writeResult(bufferedWriter);
+
 							// Display result
-							displayResult();
+							//displayResult();
 						}
 					}
 				}
 				bufferedReader.close();
-
+				bufferedWriter.close();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -180,17 +194,35 @@ public class QueryManager {
 	}
 
 
-	/*
+	/**
+	 * Write Query Result
+	 */
+	private static void writeResult(BufferedWriter bufferedWriter) throws IOException {
+		bufferedWriter.write("---------------------------------------------------------------");
+		bufferedWriter.newLine();
+		bufferedWriter.write("| " + subjectVariableName + " |");
+		bufferedWriter.newLine();
+		bufferedWriter.write("===============================================================");
+		bufferedWriter.newLine();
+		for(int subjectID : queryResult){
+			bufferedWriter.write(Dictionary.getInstance().getResource(subjectID));
+			bufferedWriter.newLine();
+		}
+		bufferedWriter.write("---------------------------------------------------------------");
+	}
+
+
+	/**
 	 * Display Query Result
 	 */
 	public static void displayResult(){
-			Dictionary dictionary = Dictionary.getInstance();
-			System.out.println("---------------------------------------------------------------");
-			System.out.println("| " + subjectVariableName + "                                                      |");
-			System.out.println("===============================================================");
-			for(int subjectID : queryResult){
-				System.out.println(dictionary.getResource(subjectID));
-			}
-			System.out.println("---------------------------------------------------------------");
+		Dictionary dictionary = Dictionary.getInstance();
+		System.out.println("---------------------------------------------------------------");
+		System.out.println("| " + subjectVariableName + " |");
+		System.out.println("===============================================================");
+		for(int subjectID : queryResult){
+			System.out.println(dictionary.getResource(subjectID));
+		}
+		System.out.println("---------------------------------------------------------------");
 	}
 }
