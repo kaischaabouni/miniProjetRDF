@@ -4,29 +4,146 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.ListIterator;
+import java.util.TreeSet;
+
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryFactory;
 import com.hp.hpl.jena.sparql.core.TriplePath;
 import com.hp.hpl.jena.sparql.syntax.ElementPathBlock;
 import com.hp.hpl.jena.sparql.syntax.ElementVisitorBase;
 import com.hp.hpl.jena.sparql.syntax.ElementWalker;
+import com.rdfengine.loading.AllProperties;
 import com.rdfengine.loading.Dictionary;
-import com.rdfengine.triplets.Triplet;
-import com.rdfengine.triplets.Triplets;
+import com.rdfengine.models.TriplePatternOfStarQuery;
 
 public class QueryManager {
 
 	/*
-	 * Temporary or Final Result
+	 * Query Status Information
 	 */
 	private static ArrayList<Integer> queryResult = null;
+	private static boolean queryExecutionCompleted = false;
+	private static ArrayList<TriplePatternOfStarQuery> triplePatternsList = null;
+	private static String subjectVariableName = null;
 
+	/*
+	 * Pre-Process Query extract triple patterns
+	 */
+	public static void preProcessQuery(Query query){
+		// initialize 
+		triplePatternsList = new ArrayList<TriplePatternOfStarQuery>();
+		subjectVariableName = null;
+		queryExecutionCompleted = false;
+
+		// Parsing the query and executing triple patterns
+		ElementWalker.walk(query.getQueryPattern(),new ElementVisitorBase(){
+			@Override public void visit(ElementPathBlock elementPathBlock){
+				ListIterator<TriplePath> listIterator=elementPathBlock.getPattern().iterator();
+				while (listIterator.hasNext()) {
+					TriplePath triplePath=listIterator.next();
+
+					// Add <> if resource or "" if literal
+					String predicate = "<" + triplePath.getPredicate().toString() + ">";
+					String object;
+					if(triplePath.getObject().isLiteral()){
+						object = "\"" + triplePath.getObject().toString() + "\"";
+					} else {
+						object = "<" + triplePath.getObject().toString() + ">";
+					}
+
+					// create TripplePatternOfStarQuery
+					subjectVariableName = triplePath.getSubject().getName();
+					Integer predicateID = Dictionary.getInstance().getId(predicate);
+					Integer objectID = Dictionary.getInstance().getId(object);
+					TriplePatternOfStarQuery triplePatternOfStarQuery = 
+							new TriplePatternOfStarQuery(predicateID, objectID);
+					
+					// add TripplePatternOfStarQuery to triplePatternsList
+					triplePatternsList.add(triplePatternOfStarQuery);
+				}
+			}
+		});
+	}
+
+
+	/*
+	 * Execute Query 
+	 */
+	public static void executeQuery() {
+		
+		// initialize
+		queryResult = new ArrayList<Integer>();
+		
+		// Iterator for triplePatternsList
+		Iterator<TriplePatternOfStarQuery> iterator = triplePatternsList.iterator();
+
+		// Execute First Triple Pattern
+		if(iterator.hasNext()){
+			executeTriplePattern(iterator.next());
+		}
+
+		// Execute the rest of triple patterns with join with (temporary result) if the query is not completed
+		while (!queryExecutionCompleted && iterator.hasNext()) {
+			executeTriplePatternWithJoin(iterator.next(), queryResult);
+		}
+		queryExecutionCompleted = true;
+	}
+
+	/*
+	 * Execute first triple pattern (without join)
+	 */
+	private static void executeTriplePattern(TriplePatternOfStarQuery triplePatternOfStarQuery) {
+		
+		Integer predicateID = triplePatternOfStarQuery.getPredicateID();
+		Integer objectID = triplePatternOfStarQuery.getObjectID();
+
+		// Check if property exists
+		if(AllProperties.contains(predicateID)){
+			queryResult = new ArrayList<Integer>(AllProperties.getListSubjectsByPredicateAndObject(predicateID, objectID));
+			if(queryResult.isEmpty()){
+				// result empty of the first pattern: no need to continue execution of the query
+				queryExecutionCompleted = true;
+			}
+		} else {
+			// property doesn't exist no need to continue the execution of the query
+			queryExecutionCompleted = true;
+		}
+	}
+
+	/*
+	 * Execute a triple pattern with join
+	 */
+	private static void executeTriplePatternWithJoin(TriplePatternOfStarQuery triplePatternOfStarQuery, ArrayList<Integer> joinTable) {
+
+		Integer predicateID = triplePatternOfStarQuery.getPredicateID();
+		Integer objectID = triplePatternOfStarQuery.getObjectID();
+		queryResult = new ArrayList<Integer>();
+		
+		// Check if property exists
+		if(AllProperties.contains(predicateID)){
+			for(Integer subjectID : joinTable){
+				TreeSet<Integer> listObjects = 
+						AllProperties.getListObjectsByPredicateAndSubject(predicateID, subjectID);
+				if(listObjects.contains(objectID)){
+					queryResult.add(subjectID);
+				} 
+			}
+			if(queryResult.isEmpty()){
+				// result empty of the first pattern: no need to continue execution of the query
+				queryExecutionCompleted = true;
+			}
+		} else {
+			queryExecutionCompleted = true;
+		}
+	}
+	
 	/*
 	 * Execute Queries in files in directory
 	 */
 	public static void executeQueriesFromDirectoryPath (String queriesDirectoryPath){
-		
+
 		// Execute Queries from each file in the directory
 		File directory = new File(queriesDirectoryPath); 
 		for (File file : directory.listFiles()) {
@@ -42,7 +159,15 @@ public class QueryManager {
 						if(! sparqlQuery.isEmpty()){
 							query = QueryFactory.create(sparqlQuery);
 							sparqlQuery = "";
-							executeQuery(query);
+							
+							// Pre-Process Query
+							preProcessQuery(query);
+							
+							// Execute Query
+							executeQuery();
+							
+							// Display result
+							displayResult();
 						}
 					}
 				}
@@ -54,74 +179,18 @@ public class QueryManager {
 		}
 	}
 
-	/*
-	 * Execute Query (star query)
-	 */
-	public static void executeQuery(Query query) {
-
-		// initiate result to null
-		queryResult = null;
-
-		// Parsing the query and executing triple patterns
-		ElementWalker.walk(query.getQueryPattern(),new ElementVisitorBase(){
-			@Override public void visit(ElementPathBlock elementPathBlock){
-				ListIterator<TriplePath> listIterator=elementPathBlock.getPattern().iterator();
-				while (listIterator.hasNext()) {
-					TriplePath triplePath=listIterator.next();
-					executeTriplePatternWithJoin(triplePath, queryResult);
-				}
-			}
-		});
-		
-		displayQueryResult();
-	}
-
-	/*
-	 * Execute a triple pattern
-	 */
-	private static void executeTriplePatternWithJoin(TriplePath tp, ArrayList<Integer> joinTable) {
-		Dictionary dictionary = Dictionary.getInstance();
-		int predicateID;
-		int objectID;
-
-		// Add <> if resource or "" if literal
-		String predicate = "<" + tp.getPredicate().toString() + ">";
-		String object;
-		if(tp.getObject().isLiteral()){
-			object = "\"" + tp.getObject().toString() + "\"";
-		} else {
-			object = "<" + tp.getObject().toString() + ">";
-		}
-
-		predicateID = dictionary.getId(predicate);
-		objectID = dictionary.getId(object);
-
-		queryResult = new ArrayList<Integer>();
-
-		for(Triplet triple :Triplets.getTriplets()){
-			if((joinTable == null || joinTable.contains(triple.getSubject())) 
-					&& triple.getPredicate() == predicateID 
-					&& triple.getObject() == objectID){
-
-				// Add the subject ID if it is not already added
-				if(! queryResult.contains(triple.getSubject())){
-					queryResult.add(triple.getSubject());
-				}
-			}
-		}
-	}
 
 	/*
 	 * Display Query Result
 	 */
-	public static void displayQueryResult(){
-		Dictionary dictionary = Dictionary.getInstance();
-		System.out.println("---------------------------------------------------------------");
-		System.out.println("| Result                                                      |");
-		System.out.println("===============================================================");
-		for(int subjectID : queryResult){
-			System.out.println(dictionary.getResource(subjectID));
-		}
-		System.out.println("---------------------------------------------------------------");
+	public static void displayResult(){
+			Dictionary dictionary = Dictionary.getInstance();
+			System.out.println("---------------------------------------------------------------");
+			System.out.println("| Result                                                      |");
+			System.out.println("===============================================================");
+			for(int subjectID : queryResult){
+				System.out.println(dictionary.getResource(subjectID));
+			}
+			System.out.println("---------------------------------------------------------------");
 	}
 }

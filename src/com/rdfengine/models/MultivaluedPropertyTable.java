@@ -7,8 +7,8 @@ public class MultivaluedPropertyTable extends PropertyTable {
 
 	private HashMap<Integer, TreeSet<Integer>> subjectToObjects;
 	private HashMap<Integer, TreeSet<Integer>> objectToSubjects;
-	
-	
+
+
 	public MultivaluedPropertyTable() {
 		super();
 		subjectToObjects = new HashMap<Integer, TreeSet<Integer>>();
@@ -23,7 +23,7 @@ public class MultivaluedPropertyTable extends PropertyTable {
 			TreeSet<Integer> singleObjectTS = new TreeSet<Integer>();
 			singleObjectTS.add(objectID);
 			subjectToObjects.put(subjectID, singleObjectTS);
-			
+
 			// 
 			if(! objectToSubjects.containsKey(objectID)){
 				// add object and a single Subject treeSet to objectsToSubjects
@@ -36,15 +36,15 @@ public class MultivaluedPropertyTable extends PropertyTable {
 				treeSetSubjects.add(subjectID);
 			}
 		} else {
-			
+
 			//subjectToObjects contains the subject
 			TreeSet<Integer> treeSetObjects = subjectToObjects.get(subjectID);
 			if(! treeSetObjects.contains(objectID)){
-				
+
 				// subjectToObjects doesn't contain the object
-				
+
 				treeSetObjects.add(objectID);
-				
+
 				if(! objectToSubjects.containsKey(objectID)){
 					// objectToSubjects doesn't contain the object
 					// add the object and a single Subject treeSet to objectsToSubjects
@@ -62,11 +62,28 @@ public class MultivaluedPropertyTable extends PropertyTable {
 		}
 	}
 
+	@Override
+	public TreeSet<Integer> getListObjectsBySubject(Integer subjectID) {
+		if(subjectToObjects.containsKey(subjectID)){
+			return subjectToObjects.get(subjectID);
+		} else {
 
+			// return empty set if subjectToObjects doesn't contain subjectID
+			return new TreeSet<Integer>();
+		}
+	}
+
+	@Override
+	public TreeSet<Integer> getListSubjectsByObject(Integer objectID) {
+		if(objectToSubjects.containsKey(objectID)){
+			return objectToSubjects.get(objectID);
+		} else {
+			return new TreeSet<Integer>();
+		}
+	}
 
 	public String toString()
 	{
 		return "subjectsToObjects: " + subjectToObjects + "\nobjectsToSubjects: " + objectToSubjects;
 	}
-	
 }
