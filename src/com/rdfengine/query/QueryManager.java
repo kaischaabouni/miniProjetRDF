@@ -26,7 +26,6 @@ public class QueryManager {
 	private static ArrayList<Integer> queryResult = null;
 	private static boolean queryExecutionCompleted = false;
 	private static ArrayList<TriplePatternOfStarQuery> triplePatternsList = null;
-	@SuppressWarnings("unused")
 	private static String subjectVariableName = null;
 
 	/*
@@ -187,7 +186,7 @@ public class QueryManager {
 	public static void displayResult(){
 			Dictionary dictionary = Dictionary.getInstance();
 			System.out.println("---------------------------------------------------------------");
-			System.out.println("| Result                                                      |");
+			System.out.println("| " + subjectVariableName + "                                                      |");
 			System.out.println("===============================================================");
 			for(int subjectID : queryResult){
 				System.out.println(dictionary.getResource(subjectID));
