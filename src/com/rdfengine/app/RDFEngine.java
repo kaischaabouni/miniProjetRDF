@@ -1,5 +1,9 @@
 package com.rdfengine.app;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+
 import com.rdfengine.loading.Loader;
 import com.rdfengine.query.QueryManager;
 
@@ -42,8 +46,13 @@ public class RDFEngine {
 //		QueryManager.displayResult();
 
 		long endQueryTime = System.currentTimeMillis();
-		System.out.println("Loading Dataset Time : " + ((endLoadTime - startTime) / 1000) + " s");
-		System.out.println("Query and Display Time : " + ((endQueryTime - endLoadTime) / 1000) + " s");
+		try (BufferedWriter bw = new BufferedWriter(new FileWriter("executiontime.csv"))) {
+			bw.write("Loading Time (s), Query and Display Time (s)");
+			bw.newLine();
+			bw.write(((endLoadTime - startTime) / 1000) + ", " + ((endQueryTime - endLoadTime) / 1000));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }
