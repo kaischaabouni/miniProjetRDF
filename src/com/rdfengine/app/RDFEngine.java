@@ -1,7 +1,5 @@
 package com.rdfengine.app;
 
-import com.hp.hpl.jena.query.Query;
-import com.hp.hpl.jena.query.QueryFactory;
 import com.rdfengine.loading.Loader;
 import com.rdfengine.query.QueryManager;
 

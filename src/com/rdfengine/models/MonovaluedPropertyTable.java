@@ -1,6 +1,5 @@
 package com.rdfengine.models;
 
-import java.util.List;
 import java.util.TreeSet;
 
 public class MonovaluedPropertyTable extends PropertyTable {
