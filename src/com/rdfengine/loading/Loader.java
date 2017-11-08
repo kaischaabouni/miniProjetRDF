@@ -5,7 +5,14 @@ import java.io.FileReader;
 
 public abstract class Loader {
 
+//	private static long startLoadingDataTime = 0;
+//	private static long loadingDataTime = 0;
+	
 	public static void loadData(String filePath) {
+		// Initialize start Data Time
+//		startLoadingDataTime = System.currentTimeMillis();
+		
+		// Load Data
 		Dictionary dictionary = Dictionary.getInstance();
 		String line = null;
 		String tripletString = "";
@@ -39,7 +46,8 @@ public abstract class Loader {
 				if(!dictionary.containsResource(splittedTrippleString[0])) {
 					dictionary.addResource(splittedTrippleString[0]);
 					subjectID = dictionary.getId(splittedTrippleString[0]);
-					AllSubjects.addSubject(subjectID);
+					// new feature not implemented yet
+					//AllSubjects.addSubject(subjectID);
 				} else {
 					subjectID = dictionary.getId(splittedTrippleString[0]);
 				}
@@ -70,5 +78,11 @@ public abstract class Loader {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+//		loadingDataTime = System.currentTimeMillis() - startLoadingDataTime;
 	}
+
+//	public static long getLoadingTime() {
+//		return loadingDataTime;
+//	}
 }
