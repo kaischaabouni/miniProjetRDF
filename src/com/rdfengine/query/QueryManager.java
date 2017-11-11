@@ -25,7 +25,7 @@ import com.rdfengine.models.TriplePatternOfStarQuery;
 public class QueryManager {
 
 	private static final String RESULT_FILE_NAME = "result.csv";
-//	private static final String EXECUTION_TIME = "executiontime.csv";
+	//	private static final String EXECUTION_TIME = "executiontime.csv";
 
 	/*
 	 * Query Status Information
@@ -34,12 +34,12 @@ public class QueryManager {
 	private static boolean queryExecutionCompleted = false;
 	private static ArrayList<TriplePatternOfStarQuery> triplePatternsList = null;
 	private static String subjectVariableName = null;
-//	private static long startReadingQueryTime = 0;
-//	private static long readingQueryTime = 0;
-//	private static long startExecutionTime = 0;
-//	private static long executionTime = 0;
-	
-	
+	//	private static long startReadingQueryTime = 0;
+	//	private static long readingQueryTime = 0;
+	//	private static long startExecutionTime = 0;
+	//	private static long executionTime = 0;
+
+
 	/**
 	 * Pre-Process Query extract triple patterns
 	 */
@@ -48,7 +48,7 @@ public class QueryManager {
 		triplePatternsList = new ArrayList<TriplePatternOfStarQuery>();
 		subjectVariableName = null;
 		queryExecutionCompleted = false;
-//		startReadingQueryTime = System.currentTimeMillis();
+		//		startReadingQueryTime = System.currentTimeMillis();
 
 		// Parsing the query and executing triple patterns
 		ElementWalker.walk(query.getQueryPattern(),new ElementVisitorBase(){
@@ -78,10 +78,10 @@ public class QueryManager {
 				}
 			}
 		});
-		
+
 		// update Reading Query Time
-//		startExecutionTime = System.currentTimeMillis();
-//		readingQueryTime = readingQueryTime + startExecutionTime - startReadingQueryTime;
+		//		startExecutionTime = System.currentTimeMillis();
+		//		readingQueryTime = readingQueryTime + startExecutionTime - startReadingQueryTime;
 		//System.out.println("readingQueryTime : " + readingQueryTime);
 	}
 
@@ -93,7 +93,7 @@ public class QueryManager {
 
 		// initialize
 		queryResult = new ArrayList<Integer>();
-				
+
 		// Iterator for triplePatternsList
 		Iterator<TriplePatternOfStarQuery> iterator = triplePatternsList.iterator();
 
@@ -107,13 +107,13 @@ public class QueryManager {
 			executeTriplePatternWithJoin(iterator.next(), queryResult);
 		}
 		queryExecutionCompleted = true;
-		
+
 		// update Execution Time
-//		executionTime = executionTime + System.currentTimeMillis() - startExecutionTime;
+		//		executionTime = executionTime + System.currentTimeMillis() - startExecutionTime;
 		//System.out.println("executionTime : " + executionTime);
 	}
 
-	
+
 	/**
 	 * Execute first triple pattern (without join)
 	 */
@@ -135,7 +135,7 @@ public class QueryManager {
 		}
 	}
 
-	
+
 	/**
 	 * Execute a triple pattern with join
 	 */
@@ -163,57 +163,79 @@ public class QueryManager {
 		}
 	}
 
-	
+
 	/**
 	 * Execute Queries in files in directory
 	 */
 	public static void executeQueriesFromDirectoryPath (String queriesDirectoryPath){
 
+		// initialize current and next sparql query
+		String currentSparqlQuery = "";
+		String line = "";
+		int posSelect = -1;
+		Query query;
+
 		// Execute Queries from each file in the directory
-		File directory = new File(queriesDirectoryPath); 
-		for (File file : directory.listFiles()) {
-			try {
-				BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
-				BufferedWriter bufferedWriterResult = new BufferedWriter(new FileWriter(RESULT_FILE_NAME));
-				String line = null;
-				String sparqlQuery = "";
-				Query query;
-				while ((line = bufferedReader.readLine()) != null) {
-					if(! line.isEmpty()){
-						sparqlQuery = sparqlQuery + line;
-					} else {
-						if(! sparqlQuery.isEmpty()){
-							query = QueryFactory.create(sparqlQuery);
-							sparqlQuery = "";
+		BufferedWriter bufferedWriterResult;
+		try {
+			bufferedWriterResult = new BufferedWriter(new FileWriter(RESULT_FILE_NAME));
 
-							// Pre-Process Query
-							preProcessQuery(query);
+			File directory = new File(queriesDirectoryPath); 
+			for (File file : directory.listFiles()) {
+				try {
+					BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
 
-							// Execute Query
-							executeQuery();
+					// Read line by line the current file
+					line = bufferedReader.readLine();
+					while (line != null) {
+						// Search for an occurrence of "SELECT"
+						posSelect = line.indexOf("SELECT");
+						if(posSelect >= 0){
+							currentSparqlQuery = currentSparqlQuery + " " + line.substring(0, posSelect);
 
-							// Write Result in RESULT_FILE_NAME
-							writeResult(bufferedWriterResult);
-							
-							// Display result
-							//displayResult();
+							// Execute Query. (PS: always true except for the first time)
+							if(currentSparqlQuery.contains("SELECT")){
+								query = QueryFactory.create(currentSparqlQuery);							
+								preProcessQuery(query);
+								executeQuery();
+								writeResult(bufferedWriterResult);
+							}
+
+							//
+							currentSparqlQuery = line.substring(posSelect);
+						} else {
+							currentSparqlQuery = currentSparqlQuery + " " + line;
 						}
+						line = bufferedReader.readLine();
 					}
+					bufferedReader.close();
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
-				bufferedReader.close();
-				bufferedWriterResult.close();
-			} catch (Exception e) {
-				e.printStackTrace();
 			}
+
+			// Execute the last query
+			if(currentSparqlQuery.contains("SELECT")){
+				query = QueryFactory.create(currentSparqlQuery);							
+				preProcessQuery(query);
+				executeQuery();
+				writeResult(bufferedWriterResult);	
+			}
+
+			// close buffered Writer
+			bufferedWriterResult.close();
+		} catch (IOException e1) {
+			e1.printStackTrace();
 		}
-		
+
+
 		// Write Execution Time
-//		try (BufferedWriter bufferedWriterExecutionTime = new BufferedWriter(new FileWriter(EXECUTION_TIME))) {
-//			writeExecutionTime(bufferedWriterExecutionTime);
-//			bufferedWriterExecutionTime.close();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
+		//		try (BufferedWriter bufferedWriterExecutionTime = new BufferedWriter(new FileWriter(EXECUTION_TIME))) {
+		//			writeExecutionTime(bufferedWriterExecutionTime);
+		//			bufferedWriterExecutionTime.close();
+		//		} catch (IOException e) {
+		//			e.printStackTrace();
+		//		}
 	}
 
 
@@ -235,26 +257,26 @@ public class QueryManager {
 		bufferedWriter.newLine();
 	}
 
-	
+
 	/**
 	 * Write Execution Time
 	 * @param bufferedWriterExecutionTime
 	 * @throws IOException 
 	 */
-//	private static void writeExecutionTime(BufferedWriter bufferedWriterExecutionTime) throws IOException {
-//		
-//		// Wite Execution Time
-//		bufferedWriterExecutionTime.write("Loading Time (ms), Reading Queries Time (ms), Execution Queries Time (ms)");
-//		bufferedWriterExecutionTime.newLine();
-//		bufferedWriterExecutionTime.write(Loader.getLoadingTime() + ", " + readingQueryTime + ", " + executionTime);
-//		bufferedWriterExecutionTime.newLine();
-//
-//		// Reinitialize to 0
-//		readingQueryTime = 0;
-//		executionTime = 0;
-//	}
-	
-	
+	//	private static void writeExecutionTime(BufferedWriter bufferedWriterExecutionTime) throws IOException {
+	//		
+	//		// Wite Execution Time
+	//		bufferedWriterExecutionTime.write("Loading Time (ms), Reading Queries Time (ms), Execution Queries Time (ms)");
+	//		bufferedWriterExecutionTime.newLine();
+	//		bufferedWriterExecutionTime.write(Loader.getLoadingTime() + ", " + readingQueryTime + ", " + executionTime);
+	//		bufferedWriterExecutionTime.newLine();
+	//
+	//		// Reinitialize to 0
+	//		readingQueryTime = 0;
+	//		executionTime = 0;
+	//	}
+
+
 	/**
 	 * Display Query Result
 	 */

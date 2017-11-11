@@ -47,7 +47,7 @@ public class RDFEngine {
 
 		long endQueryTime = System.currentTimeMillis();
 		try (BufferedWriter bw = new BufferedWriter(new FileWriter("executiontime.csv"))) {
-			bw.write("Loading Time (ms), Query and Display Time (ms)");
+			bw.write("Loading Time (ms), Reading and Executing Queries Time (ms)");
 			bw.newLine();
 			bw.write((endLoadTime - startTime) + ", " + (endQueryTime - endLoadTime));
 		} catch (IOException e) {
