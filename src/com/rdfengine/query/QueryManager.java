@@ -40,6 +40,7 @@ public class QueryManager {
 	 * Pre-Process Query extract triple patterns
 	 */
 	public static void preProcessQuery(Query query){
+
 		// initialize 
 		triplePatternsList = new ArrayList<TriplePatternOfStarQuery>();
 		subjectVariableName = null;
@@ -49,7 +50,7 @@ public class QueryManager {
 		ElementWalker.walk(query.getQueryPattern(),new ElementVisitorBase(){
 			@Override public void visit(ElementPathBlock elementPathBlock){
 				ListIterator<TriplePath> listIterator=elementPathBlock.getPattern().iterator();
-				while (listIterator.hasNext()) {
+				while (!queryExecutionCompleted && listIterator.hasNext()) {
 					TriplePath triplePath=listIterator.next();
 
 					// Add <> if resource or "" if literal
@@ -63,13 +64,20 @@ public class QueryManager {
 
 					// create TripplePatternOfStarQuery
 					subjectVariableName = triplePath.getSubject().getName();
-					Integer predicateID = Dictionary.getInstance().getId(predicate);
-					Integer objectID = Dictionary.getInstance().getId(object);
-					TriplePatternOfStarQuery triplePatternOfStarQuery = 
-							new TriplePatternOfStarQuery(predicateID, objectID);
-
-					// add TripplePatternOfStarQuery to triplePatternsList
-					triplePatternsList.add(triplePatternOfStarQuery);
+					Integer predicateID; 
+					Integer objectID;
+					if(Dictionary.getInstance().containsResource(predicate) 
+							&& Dictionary.getInstance().containsResource(object)){
+						predicateID = Dictionary.getInstance().getId(predicate);
+						objectID = Dictionary.getInstance().getId(object);
+						
+						// add TripplePatternOfStarQuery to triplePatternsList
+						triplePatternsList.add(new TriplePatternOfStarQuery(predicateID, objectID));
+					} else {
+						
+						// resource doesn't exist in dictionary, no need to read the res of triple-pattern 
+						queryExecutionCompleted = true;
+					}
 				}
 			}
 		});
@@ -88,7 +96,7 @@ public class QueryManager {
 		Iterator<TriplePatternOfStarQuery> iterator = triplePatternsList.iterator();
 
 		// Execute First Triple Pattern
-		if(iterator.hasNext()){
+		if(!queryExecutionCompleted && iterator.hasNext()){
 			executeTriplePattern(iterator.next());
 		}
 
