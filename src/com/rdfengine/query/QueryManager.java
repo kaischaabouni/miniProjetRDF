@@ -25,7 +25,6 @@ import com.rdfengine.models.TriplePatternOfStarQuery;
 public class QueryManager {
 
 	private static final String RESULT_FILE_NAME = "result.csv";
-	//	private static final String EXECUTION_TIME = "executiontime.csv";
 
 	/*
 	 * Query Status Information
@@ -34,10 +33,7 @@ public class QueryManager {
 	private static boolean queryExecutionCompleted = false;
 	private static ArrayList<TriplePatternOfStarQuery> triplePatternsList = null;
 	private static String subjectVariableName = null;
-	//	private static long startReadingQueryTime = 0;
-	//	private static long readingQueryTime = 0;
-	//	private static long startExecutionTime = 0;
-	//	private static long executionTime = 0;
+
 
 
 	/**
@@ -48,7 +44,6 @@ public class QueryManager {
 		triplePatternsList = new ArrayList<TriplePatternOfStarQuery>();
 		subjectVariableName = null;
 		queryExecutionCompleted = false;
-		//		startReadingQueryTime = System.currentTimeMillis();
 
 		// Parsing the query and executing triple patterns
 		ElementWalker.walk(query.getQueryPattern(),new ElementVisitorBase(){
@@ -78,11 +73,6 @@ public class QueryManager {
 				}
 			}
 		});
-
-		// update Reading Query Time
-		//		startExecutionTime = System.currentTimeMillis();
-		//		readingQueryTime = readingQueryTime + startExecutionTime - startReadingQueryTime;
-		//System.out.println("readingQueryTime : " + readingQueryTime);
 	}
 
 
@@ -107,10 +97,6 @@ public class QueryManager {
 			executeTriplePatternWithJoin(iterator.next(), queryResult);
 		}
 		queryExecutionCompleted = true;
-
-		// update Execution Time
-		//		executionTime = executionTime + System.currentTimeMillis() - startExecutionTime;
-		//System.out.println("executionTime : " + executionTime);
 	}
 
 
@@ -227,15 +213,6 @@ public class QueryManager {
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
-
-
-		// Write Execution Time
-		//		try (BufferedWriter bufferedWriterExecutionTime = new BufferedWriter(new FileWriter(EXECUTION_TIME))) {
-		//			writeExecutionTime(bufferedWriterExecutionTime);
-		//			bufferedWriterExecutionTime.close();
-		//		} catch (IOException e) {
-		//			e.printStackTrace();
-		//		}
 	}
 
 
@@ -256,25 +233,6 @@ public class QueryManager {
 		bufferedWriter.write("---------------------------------------------------------------");
 		bufferedWriter.newLine();
 	}
-
-
-	/**
-	 * Write Execution Time
-	 * @param bufferedWriterExecutionTime
-	 * @throws IOException 
-	 */
-	//	private static void writeExecutionTime(BufferedWriter bufferedWriterExecutionTime) throws IOException {
-	//		
-	//		// Wite Execution Time
-	//		bufferedWriterExecutionTime.write("Loading Time (ms), Reading Queries Time (ms), Execution Queries Time (ms)");
-	//		bufferedWriterExecutionTime.newLine();
-	//		bufferedWriterExecutionTime.write(Loader.getLoadingTime() + ", " + readingQueryTime + ", " + executionTime);
-	//		bufferedWriterExecutionTime.newLine();
-	//
-	//		// Reinitialize to 0
-	//		readingQueryTime = 0;
-	//		executionTime = 0;
-	//	}
 
 
 	/**
