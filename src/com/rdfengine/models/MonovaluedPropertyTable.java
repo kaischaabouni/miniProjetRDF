@@ -21,4 +21,11 @@ public class MonovaluedPropertyTable extends PropertyTable {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public int getNumberOfOcurrences() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

@@ -25,8 +25,7 @@ public abstract class AllProperties {
 	 * Add Subject And Object To Existing Property
 	 */
 	public static void addSubjectAndObjectToExistingProperty(Integer subjectID, Integer predicateID, Integer objectID){
-		PropertyTable propertyTable = allProperties.get(predicateID);
-		propertyTable.addSubjectAndObjectToPropertyTable(subjectID, objectID);
+		allProperties.get(predicateID).addSubjectAndObjectToPropertyTable(subjectID, objectID);
 	}
 
 	public static void display() {
@@ -34,7 +33,7 @@ public abstract class AllProperties {
 	}
 
 	/*
-	 * Check if AllProperties conatins property
+	 * Check if AllProperties contains property
 	 */
 	public static boolean contains(Integer predicateID) {
 		return allProperties.containsKey(predicateID);
@@ -61,4 +60,14 @@ public abstract class AllProperties {
 	public static TreeSet<Integer> getListSubjectsByPredicateAndObject(Integer predicateID, Integer objectID) {
 		return allProperties.get(predicateID).getListSubjectsByObject(objectID);
 	}
+
+	/**
+	 * 
+	 * @param predicateID
+	 * @return
+	 */
+	public static int getNumberOcurrencesOfProperty(Integer predicateID) {
+		return allProperties.get(predicateID).getNumberOfOcurrences();
+	}
+
 }

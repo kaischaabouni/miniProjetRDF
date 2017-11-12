@@ -59,7 +59,7 @@ public abstract class Loader {
 					predicateID = dictionary.getId(splittedTrippleString[1]);
 					AllProperties.addProperty(predicateID);
 				} else {
-					predicateID = dictionary.getId(splittedTrippleString[1]);
+					predicateID = dictionary.getId(splittedTrippleString[1]);					
 				}
 				
 				// Object

@@ -66,13 +66,24 @@ public class QueryManager {
 					subjectVariableName = triplePath.getSubject().getName();
 					Integer predicateID; 
 					Integer objectID;
+					int numberOccurencesMin = -1;
 					if(Dictionary.getInstance().containsResource(predicate) 
 							&& Dictionary.getInstance().containsResource(object)){
 						predicateID = Dictionary.getInstance().getId(predicate);
 						objectID = Dictionary.getInstance().getId(object);
 						
-						// add TripplePatternOfStarQuery to triplePatternsList
-						triplePatternsList.add(new TriplePatternOfStarQuery(predicateID, objectID));
+						int currentNumberOcurrencesOfProperty = 
+								AllProperties.getNumberOcurrencesOfProperty(predicateID);
+						if(numberOccurencesMin >= 0 && 
+								currentNumberOcurrencesOfProperty < numberOccurencesMin){
+							numberOccurencesMin = currentNumberOcurrencesOfProperty;
+							
+							// add TripplePatternOfStarQuery to the head of triplePatternsList
+							triplePatternsList.add(0, new TriplePatternOfStarQuery(predicateID, objectID));
+						} else {
+							// add TripplePatternOfStarQuery to the end of triplePatternsList
+							triplePatternsList.add(new TriplePatternOfStarQuery(predicateID, objectID));
+						}
 					} else {
 						
 						// resource doesn't exist in dictionary, no need to read the res of triple-pattern 

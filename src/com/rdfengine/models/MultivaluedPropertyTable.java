@@ -5,12 +5,14 @@ import java.util.TreeSet;
 
 public class MultivaluedPropertyTable extends PropertyTable {
 
+	private int numberOfOcurrences;
 	private HashMap<Integer, TreeSet<Integer>> subjectToObjects;
 	private HashMap<Integer, TreeSet<Integer>> objectToSubjects;
 
 
 	public MultivaluedPropertyTable() {
 		super();
+		numberOfOcurrences = 0;
 		subjectToObjects = new HashMap<Integer, TreeSet<Integer>>();
 		objectToSubjects = new HashMap<Integer, TreeSet<Integer>>();
 	}
@@ -18,6 +20,10 @@ public class MultivaluedPropertyTable extends PropertyTable {
 	@Override
 	public void addSubjectAndObjectToPropertyTable(Integer subjectID, Integer objectID){
 
+		// update numberOfOcurrences
+		numberOfOcurrences++;
+		
+		//
 		if(! subjectToObjects.containsKey(subjectID)){
 			// add the subject and a single Object treeSet to subjectToObjects
 			TreeSet<Integer> singleObjectTS = new TreeSet<Integer>();
@@ -82,8 +88,14 @@ public class MultivaluedPropertyTable extends PropertyTable {
 		}
 	}
 
+	@Override
 	public String toString()
 	{
 		return "subjectsToObjects: " + subjectToObjects + "\nobjectsToSubjects: " + objectToSubjects;
+	}
+
+	@Override
+	public int getNumberOfOcurrences() {
+		return numberOfOcurrences;
 	}
 }

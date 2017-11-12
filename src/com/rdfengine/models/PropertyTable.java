@@ -24,4 +24,11 @@ public abstract class PropertyTable {
 	 * @return list of subjects by object. The list can be empty if no such subbject exists
 	 */
 	public abstract TreeSet<Integer> getListSubjectsByObject(Integer objectID);
+
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public abstract int getNumberOfOcurrences();
 }
