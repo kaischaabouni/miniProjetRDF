@@ -30,8 +30,10 @@ public class QueryManager {
 	 * Query Status Information
 	 */
 	private static ArrayList<Integer> queryResult = null;
+	public static ArrayList<ArrayList<Integer>> queriesResults;
 	private static boolean queryExecutionCompleted = false;
-	private static ArrayList<TriplePatternOfStarQuery> triplePatternsList = null;
+	private static ArrayList<TriplePatternOfStarQuery> triplePatternsList;
+	private static ArrayList<ArrayList<TriplePatternOfStarQuery>> QueriesTriplePatternsList;
 	private static String subjectVariableName = null;
 
 
@@ -39,10 +41,12 @@ public class QueryManager {
 	/**
 	 * Pre-Process Query extract triple patterns
 	 */
-	public static void preProcessQuery(Query query){
+	public static ArrayList<TriplePatternOfStarQuery> preProcessQuery(Query query){
 
 		// initialize 
 		triplePatternsList = new ArrayList<TriplePatternOfStarQuery>();
+		
+		
 		subjectVariableName = null;
 		queryExecutionCompleted = false;
 
@@ -88,34 +92,39 @@ public class QueryManager {
 						
 						// resource doesn't exist in dictionary, no need to read the res of triple-pattern 
 						queryExecutionCompleted = true;
+						
 					}
 				}
 			}
 		});
+		return triplePatternsList;
 	}
 
 
 	/**
 	 * Execute Query 
 	 */
-	public static void executeQuery() {
+	public static ArrayList<Integer> executeQuery(ArrayList<TriplePatternOfStarQuery> query) {
 
 		// initialize
 		queryResult = new ArrayList<Integer>();
 
 		// Iterator for triplePatternsList
-		Iterator<TriplePatternOfStarQuery> iterator = triplePatternsList.iterator();
-
+		Iterator<TriplePatternOfStarQuery> iterator = query.iterator();
+		queryExecutionCompleted = false;
 		// Execute First Triple Pattern
 		if(!queryExecutionCompleted && iterator.hasNext()){
 			executeTriplePattern(iterator.next());
+			
 		}
 
 		// Execute the rest of triple patterns with join with (temporary result) if the query is not completed
 		while (!queryExecutionCompleted && iterator.hasNext()) {
 			executeTriplePatternWithJoin(iterator.next(), queryResult);
+			
 		}
 		queryExecutionCompleted = true;
+		return queryResult;
 	}
 
 
@@ -173,17 +182,19 @@ public class QueryManager {
 	 * Execute Queries in files in directory
 	 */
 	public static void executeQueriesFromDirectoryPath (String queriesDirectoryPath){
-
+		
+		queriesResults = new ArrayList<ArrayList<Integer>>();
 		// initialize current and next sparql query
+		QueriesTriplePatternsList = new ArrayList<ArrayList<TriplePatternOfStarQuery>>();
 		String currentSparqlQuery = "";
 		String line = "";
 		int posSelect = -1;
 		Query query;
 
 		// Execute Queries from each file in the directory
-		BufferedWriter bufferedWriterResult;
+		
 		try {
-			bufferedWriterResult = new BufferedWriter(new FileWriter(RESULT_FILE_NAME));
+			
 
 			File directory = new File(queriesDirectoryPath); 
 			for (File file : directory.listFiles()) {
@@ -202,8 +213,7 @@ public class QueryManager {
 							if(currentSparqlQuery.contains("SELECT")){
 								query = QueryFactory.create(currentSparqlQuery);							
 								preProcessQuery(query);
-								executeQuery();
-								writeResult(bufferedWriterResult);
+								QueriesTriplePatternsList.add(triplePatternsList);
 							}
 
 							//
@@ -223,29 +233,45 @@ public class QueryManager {
 			if(currentSparqlQuery.contains("SELECT")){
 				query = QueryFactory.create(currentSparqlQuery);							
 				preProcessQuery(query);
-				executeQuery();
-				writeResult(bufferedWriterResult);	
+				QueriesTriplePatternsList.add(triplePatternsList);
+				
 			}
 
 			// close buffered Writer
-			bufferedWriterResult.close();
-		} catch (IOException e1) {
+			
+		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
+		
+		long start = System.currentTimeMillis();
+		for(ArrayList<TriplePatternOfStarQuery> queryAsTriplePattern: QueriesTriplePatternsList)
+			queriesResults.add(executeQuery(queryAsTriplePattern));
+		long end = System.currentTimeMillis();
+
+		
+		BufferedWriter bufferedWriterResult;
+		try {
+		bufferedWriterResult = new BufferedWriter(new FileWriter(RESULT_FILE_NAME));
+		for(ArrayList<Integer> result: queriesResults)
+			writeResult(bufferedWriterResult, result);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 	}
 
 
 	/**
 	 * Write Query Result
 	 */
-	private static void writeResult(BufferedWriter bufferedWriter) throws IOException {
+	private static void writeResult(BufferedWriter bufferedWriter, ArrayList<Integer> result) throws IOException {
 		bufferedWriter.write("---------------------------------------------------------------");
 		bufferedWriter.newLine();
 		bufferedWriter.write("| " + subjectVariableName + " |");
 		bufferedWriter.newLine();
 		bufferedWriter.write("===============================================================");
 		bufferedWriter.newLine();
-		for(int subjectID : queryResult){
+		for(int subjectID : result){
 			bufferedWriter.write(Dictionary.getInstance().getResource(subjectID));
 			bufferedWriter.newLine();
 		}
@@ -257,6 +283,8 @@ public class QueryManager {
 	/**
 	 * Display Query Result
 	 */
+	
+
 	public static void displayResult(){
 		Dictionary dictionary = Dictionary.getInstance();
 		System.out.println("---------------------------------------------------------------");

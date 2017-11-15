@@ -2,20 +2,20 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
-	<classpathentry kind="lib" path="D:/Etudes/UMontpellier/HMIN313NAPD/RDF/materielTP/jena/commons-codec-1.6.jar"/>
-	<classpathentry kind="lib" path="D:/Etudes/UMontpellier/HMIN313NAPD/RDF/materielTP/jena/httpclient-4.2.3.jar"/>
-	<classpathentry kind="lib" path="D:/Etudes/UMontpellier/HMIN313NAPD/RDF/materielTP/jena/httpcore-4.2.2.jar"/>
-	<classpathentry kind="lib" path="D:/Etudes/UMontpellier/HMIN313NAPD/RDF/materielTP/jena/jcl-over-slf4j-1.6.4.jar"/>
-	<classpathentry kind="lib" path="D:/Etudes/UMontpellier/HMIN313NAPD/RDF/materielTP/jena/jena-arq-2.11.0.jar"/>
-	<classpathentry kind="lib" path="D:/Etudes/UMontpellier/HMIN313NAPD/RDF/materielTP/jena/jena-core-2.11.0.jar"/>
-	<classpathentry kind="lib" path="D:/Etudes/UMontpellier/HMIN313NAPD/RDF/materielTP/jena/jena-iri-1.0.0.jar"/>
-	<classpathentry kind="lib" path="D:/Etudes/UMontpellier/HMIN313NAPD/RDF/materielTP/jena/jena-sdb-1.4.0.jar"/>
-	<classpathentry kind="lib" path="D:/Etudes/UMontpellier/HMIN313NAPD/RDF/materielTP/jena/jena-tdb-1.0.0.jar"/>
-	<classpathentry kind="lib" path="D:/Etudes/UMontpellier/HMIN313NAPD/RDF/materielTP/jena/log4j-1.2.16.jar"/>
-	<classpathentry kind="lib" path="D:/Etudes/UMontpellier/HMIN313NAPD/RDF/materielTP/jena/owlapi-distribution-3.4.10.jar"/>
-	<classpathentry kind="lib" path="D:/Etudes/UMontpellier/HMIN313NAPD/RDF/materielTP/jena/slf4j-api-1.6.4.jar"/>
-	<classpathentry kind="lib" path="D:/Etudes/UMontpellier/HMIN313NAPD/RDF/materielTP/jena/slf4j-log4j12-1.6.4.jar"/>
-	<classpathentry kind="lib" path="D:/Etudes/UMontpellier/HMIN313NAPD/RDF/materielTP/jena/xercesImpl-2.11.0.jar"/>
-	<classpathentry kind="lib" path="D:/Etudes/UMontpellier/HMIN313NAPD/RDF/materielTP/jena/xml-apis-1.4.01.jar"/>
+	<classpathentry kind="lib" path="C:/Rdf engine Jena librairies/commons-codec-1.6.jar"/>
+	<classpathentry kind="lib" path="C:/Rdf engine Jena librairies/httpclient-4.2.3.jar"/>
+	<classpathentry kind="lib" path="C:/Rdf engine Jena librairies/httpcore-4.2.2.jar"/>
+	<classpathentry kind="lib" path="C:/Rdf engine Jena librairies/jcl-over-slf4j-1.6.4.jar"/>
+	<classpathentry kind="lib" path="C:/Rdf engine Jena librairies/jena-arq-2.11.0.jar"/>
+	<classpathentry kind="lib" path="C:/Rdf engine Jena librairies/jena-core-2.11.0.jar"/>
+	<classpathentry kind="lib" path="C:/Rdf engine Jena librairies/jena-iri-1.0.0.jar"/>
+	<classpathentry kind="lib" path="C:/Rdf engine Jena librairies/jena-sdb-1.4.0.jar"/>
+	<classpathentry kind="lib" path="C:/Rdf engine Jena librairies/jena-tdb-1.0.0.jar"/>
+	<classpathentry kind="lib" path="C:/Rdf engine Jena librairies/log4j-1.2.16.jar"/>
+	<classpathentry kind="lib" path="C:/Rdf engine Jena librairies/owlapi-distribution-3.4.10.jar"/>
+	<classpathentry kind="lib" path="C:/Rdf engine Jena librairies/slf4j-api-1.6.4.jar"/>
+	<classpathentry kind="lib" path="C:/Rdf engine Jena librairies/slf4j-log4j12-1.6.4.jar"/>
+	<classpathentry kind="lib" path="C:/Rdf engine Jena librairies/xercesImpl-2.11.0.jar"/>
+	<classpathentry kind="lib" path="C:/Rdf engine Jena librairies/xml-apis-1.4.01.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
