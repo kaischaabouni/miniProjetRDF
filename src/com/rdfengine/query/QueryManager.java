@@ -246,8 +246,9 @@ public class QueryManager {
 		long start = System.currentTimeMillis();
 		for(ArrayList<TriplePatternOfStarQuery> queryAsTriplePattern: QueriesTriplePatternsList)
 			queriesResults.add(executeQuery(queryAsTriplePattern));
+	
 		long end = System.currentTimeMillis();
-
+		System.out.println(end-start);
 		
 		BufferedWriter bufferedWriterResult;
 		try {
