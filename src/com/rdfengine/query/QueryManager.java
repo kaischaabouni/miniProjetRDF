@@ -38,8 +38,11 @@ public class QueryManager {
 
 	//private static ArrayList<String> queriesSubjectVariableName;
 
+	private static ArrayList<String> allSerializedQueries;
 	private static ArrayList<QueryStatus> queriesStatus;
-
+	
+	public static long preProcessingTime;
+	public static long executionTime;
 
 
 	/**
@@ -49,7 +52,8 @@ public class QueryManager {
 
 		// initialize queries status
 		queriesStatus = new ArrayList<QueryStatus>();
-
+		allSerializedQueries = new ArrayList<String>();
+		
 		//## initialize queriesResults
 		//## queriesResults = new ArrayList<ArrayList<Integer>>();
 
@@ -80,8 +84,7 @@ public class QueryManager {
 
 							// Execute Query. (PS: always true except for the first time)
 							if(currentSparqlQuery.contains("SELECT")){
-								query = QueryFactory.create(currentSparqlQuery);	
-								preProcessQuery(query);
+								allSerializedQueries.add(currentSparqlQuery);
 								//## queriesTriplePatternsList.add(triplePatternsList);
 							}
 
@@ -100,8 +103,7 @@ public class QueryManager {
 
 			// Execute the last query
 			if(currentSparqlQuery.contains("SELECT")){
-				query = QueryFactory.create(currentSparqlQuery);
-				preProcessQuery(query);
+				allSerializedQueries.add(currentSparqlQuery);
 				//## queriesTriplePatternsList.add(triplePatternsList);
 
 			}
@@ -113,16 +115,27 @@ public class QueryManager {
 		}
 
 
+		// Pre-processing queries
+		long startPreProcessing = System.currentTimeMillis();
+		for(String serializedQuery: allSerializedQueries){
+			query = QueryFactory.create(serializedQuery);	
+			preProcessQuery(query);
+		}
+
+		
 		// Executing queries
-		long start = System.currentTimeMillis();
+		long startExecuting = System.currentTimeMillis();
 		for(QueryStatus queryStatus: queriesStatus){
 			executeQuery(queryStatus);
 			//## queriesResults.add(executeQuery(queryAsTriplePattern));
 		}
+		long endExecuting = System.currentTimeMillis();
+		
+		// Update pre-processing and executing time
+		preProcessingTime = startExecuting - startPreProcessing;
+		executionTime = endExecuting - startExecuting;
 
-		long end = System.currentTimeMillis();
-		System.out.println(end-start);
-
+		// Writing Result
 		BufferedWriter bufferedWriterResult;
 		try {
 			bufferedWriterResult = new BufferedWriter(new FileWriter(RESULT_FILE_NAME));

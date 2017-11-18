@@ -5,12 +5,11 @@ import java.io.FileReader;
 
 public abstract class Loader {
 
-//	private static long startLoadingDataTime = 0;
-//	private static long loadingDataTime = 0;
+	public static long loadingDataTime;
 	
 	public static void loadData(String filePath) {
 		// Initialize start Data Time
-//		startLoadingDataTime = System.currentTimeMillis();
+		long startLoadingDataTime = System.currentTimeMillis();
 		
 		// Load Data
 		Dictionary dictionary = Dictionary.getInstance();
@@ -79,10 +78,6 @@ public abstract class Loader {
 			e.printStackTrace();
 		}
 		
-//		loadingDataTime = System.currentTimeMillis() - startLoadingDataTime;
+		loadingDataTime = System.currentTimeMillis() - startLoadingDataTime;
 	}
-
-//	public static long getLoadingTime() {
-//		return loadingDataTime;
-//	}
 }

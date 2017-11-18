@@ -29,9 +29,7 @@ public class RDFEngine {
 		/*
 		 *  Load data to Dictionary from specified file
 		 */
-		long startTime = System.currentTimeMillis();
 		Loader.loadData(filePath);
-		long endLoadTime = System.currentTimeMillis();
 
 		/*
 		 *  Execute Queries
@@ -41,11 +39,13 @@ public class RDFEngine {
 		/*
 		 * Write Time result
 		 */
-		long endQueryTime = System.currentTimeMillis();
 		try (BufferedWriter bw = new BufferedWriter(new FileWriter(EXECUTION_TIME))) {
-			bw.write("Loading Time (ms), Reading and Executing Queries Time (ms)");
+			bw.write("Loading + Parsing Time : " + Loader.loadingDataTime + " ms");
 			bw.newLine();
-			bw.write((endLoadTime - startTime) + ", " + (endQueryTime - endLoadTime));
+			bw.write("Pre-processing Time : " + QueryManager.preProcessingTime + " ms");
+			bw.newLine();
+			bw.write("Execution Time : " + QueryManager.executionTime + " ms");
+			bw.newLine();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
