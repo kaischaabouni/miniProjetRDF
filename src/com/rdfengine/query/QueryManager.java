@@ -39,8 +39,10 @@ public class QueryManager {
 	//private static ArrayList<String> queriesSubjectVariableName;
 
 	private static ArrayList<String> allSerializedQueries;
+	private static ArrayList<Query> allQueries;
 	private static ArrayList<QueryStatus> queriesStatus;
 	
+	public static long creatingJenaQueries;
 	public static long preProcessingTime;
 	public static long executionTime;
 
@@ -53,6 +55,7 @@ public class QueryManager {
 		// initialize queries status
 		queriesStatus = new ArrayList<QueryStatus>();
 		allSerializedQueries = new ArrayList<String>();
+		allQueries = new ArrayList<Query>();
 		
 		//## initialize queriesResults
 		//## queriesResults = new ArrayList<ArrayList<Integer>>();
@@ -62,7 +65,6 @@ public class QueryManager {
 		String currentSparqlQuery = "";
 		String line = "";
 		int posSelect = -1;
-		Query query;
 
 		// Pre process Queries from the files in the directory
 
@@ -85,7 +87,6 @@ public class QueryManager {
 							// Execute Query. (PS: always true except for the first time)
 							if(currentSparqlQuery.contains("SELECT")){
 								allSerializedQueries.add(currentSparqlQuery);
-								//## queriesTriplePatternsList.add(triplePatternsList);
 							}
 
 							//
@@ -104,7 +105,6 @@ public class QueryManager {
 			// Execute the last query
 			if(currentSparqlQuery.contains("SELECT")){
 				allSerializedQueries.add(currentSparqlQuery);
-				//## queriesTriplePatternsList.add(triplePatternsList);
 
 			}
 
@@ -114,11 +114,15 @@ public class QueryManager {
 			e1.printStackTrace();
 		}
 
-
+		// Creating Jena Query instances
+		long startCreatingJenaInstances = System.currentTimeMillis();
+		for(String serializedQuery: allSerializedQueries){
+			allQueries.add(QueryFactory.create(serializedQuery));	
+		}
+		
 		// Pre-processing queries
 		long startPreProcessing = System.currentTimeMillis();
-		for(String serializedQuery: allSerializedQueries){
-			query = QueryFactory.create(serializedQuery);	
+		for(Query query: allQueries){
 			preProcessQuery(query);
 		}
 
@@ -127,11 +131,11 @@ public class QueryManager {
 		long startExecuting = System.currentTimeMillis();
 		for(QueryStatus queryStatus: queriesStatus){
 			executeQuery(queryStatus);
-			//## queriesResults.add(executeQuery(queryAsTriplePattern));
 		}
 		long endExecuting = System.currentTimeMillis();
 		
-		// Update pre-processing and executing time
+		// Update creating Jena Queries Objects, pre-processing and executing time
+		creatingJenaQueries = startPreProcessing - startCreatingJenaInstances;
 		preProcessingTime = startExecuting - startPreProcessing;
 		executionTime = endExecuting - startExecuting;
 
@@ -153,8 +157,6 @@ public class QueryManager {
 	 * Pre-Process Query extract triple patterns
 	 */
 	private static void preProcessQuery(Query query){
-
-		//System.out.println(query.serialize());
 		
 		// initialize Query Status
 		QueryStatus queryStatus = new QueryStatus();
