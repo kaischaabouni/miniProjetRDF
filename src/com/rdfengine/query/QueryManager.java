@@ -24,7 +24,7 @@ import com.rdfengine.models.TriplePatternOfStarQuery;
 public class QueryManager {
 
 	private static final String RESULT_FILE_NAME = "result.csv";
-
+	public static int numberOfQueries;
 	/*
 	 * Query Status Information
 	 */
@@ -53,6 +53,7 @@ public class QueryManager {
 	public static void executeQueriesFromDirectoryPath (String queriesDirectoryPath){
 
 		// initialize queries status
+		numberOfQueries = 1;
 		queriesStatus = new ArrayList<QueryStatus>();
 		allSerializedQueries = new ArrayList<String>();
 		allQueries = new ArrayList<Query>();
@@ -86,6 +87,7 @@ public class QueryManager {
 
 							// Execute Query. (PS: always true except for the first time)
 							if(currentSparqlQuery.contains("SELECT")){
+								numberOfQueries++;
 								allSerializedQueries.add(currentSparqlQuery);
 							}
 
@@ -101,7 +103,7 @@ public class QueryManager {
 					e.printStackTrace();
 				}
 			}
-
+			
 			// Execute the last query
 			if(currentSparqlQuery.contains("SELECT")){
 				allSerializedQueries.add(currentSparqlQuery);
@@ -145,7 +147,16 @@ public class QueryManager {
 			bufferedWriterResult = new BufferedWriter(new FileWriter(RESULT_FILE_NAME));
 			for(QueryStatus queryStatus: queriesStatus){
 				writeResult(bufferedWriterResult, queryStatus);
+				
 			}
+			//temp code, ntriples calc
+			ArrayList<Integer> nResults = new ArrayList<Integer>();
+			
+//			for(int i=0; i<queriesStatus.size(); i++)
+//			{
+//				System.out.println(queriesStatus.get(i).getQueryResult().size());
+//				
+//			}
 			bufferedWriterResult.close();
 		} catch (IOException e) {
 			e.printStackTrace();

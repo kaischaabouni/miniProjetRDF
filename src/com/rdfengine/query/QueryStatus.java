@@ -56,5 +56,4 @@ public class QueryStatus {
 		this.queryResult = queryResult;
 	}
 		
-
 }

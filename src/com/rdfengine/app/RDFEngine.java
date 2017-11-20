@@ -9,7 +9,8 @@ import com.rdfengine.query.QueryManager;
 
 public class RDFEngine {
 
-	private static final String EXECUTION_TIME = "executiontime.csv";
+	private static final String EXECUTION_TIME = "executiontime2.csv";
+	public static String execTimeFile;
 
 	/*
 	 * Main Program
@@ -19,6 +20,8 @@ public class RDFEngine {
 		/*
 		 *  Dataset filePath and queriesDirecoryPath
 		 */
+		for(int i=1; i<=10; i++)
+		{
 		String filePath = "assets/datasets/500K.rdf";  
 		String queriesDirecoryPath = "assets/queries/";  
 		if(args.length == 2){
@@ -49,6 +52,8 @@ public class RDFEngine {
 			bw.write("Execution Time : " + QueryManager.executionTime + " ms");
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+		
 		}
 	}
 
