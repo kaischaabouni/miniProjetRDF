@@ -1,0 +1,5 @@
+Number of queries: 6000
+Loading + Parsing Time : 154 ms
+Creating Jena Query Instances Time : 333 ms
+Pre-processing Time : 7 ms
+Execution Time : 1 ms
