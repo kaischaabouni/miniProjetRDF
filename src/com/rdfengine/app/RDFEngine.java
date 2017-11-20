@@ -20,8 +20,7 @@ public class RDFEngine {
 		/*
 		 *  Dataset filePath and queriesDirecoryPath
 		 */
-		for(int i=1; i<=10; i++)
-		{
+
 		String filePath = "assets/datasets/500K.rdf";  
 		String queriesDirecoryPath = "assets/queries/";  
 		if(args.length == 2){
@@ -52,7 +51,7 @@ public class RDFEngine {
 			e.printStackTrace();
 		}
 		
-		}
+		
 	}
 
 }
