@@ -47,9 +47,7 @@ public class RDFEngine {
 			bw.newLine();
 			bw.write("Creating Jena Query Instances Time : " + QueryManager.creatingJenaQueries + " ms");
 			bw.newLine();
-			bw.write("Pre-processing Time : " + QueryManager.preProcessingTime + " ms");
-			bw.newLine();
-			bw.write("Execution Time : " + QueryManager.executionTime + " ms");
+			bw.write("Execution Time(+Pre-processing) : " + QueryManager.executionTime + QueryManager.preProcessingTime + " ms");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
