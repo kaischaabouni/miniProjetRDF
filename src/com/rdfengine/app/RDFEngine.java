@@ -9,7 +9,7 @@ import com.rdfengine.query.QueryManager;
 
 public class RDFEngine {
 
-	private static final String EXECUTION_TIME = "executiontime2.csv";
+	private static final String EXECUTION_TIME = "executiontime.csv";
 	public static String execTimeFile;
 
 	/*
