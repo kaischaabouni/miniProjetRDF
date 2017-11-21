@@ -42,11 +42,15 @@ public class RDFEngine {
 		 * Write Time result
 		 */
 		try (BufferedWriter bw = new BufferedWriter(new FileWriter(EXECUTION_TIME))) {
+			bw.write("number of queries : " + QueryManager.numberOfQueries);
+			bw.newLine();
 			bw.write("Loading + Parsing Time : " + Loader.loadingDataTime + " ms");
 			bw.newLine();
 			bw.write("Creating Jena Query Instances Time : " + QueryManager.creatingJenaQueries + " ms");
 			bw.newLine();
-			bw.write("Execution Time(+Pre-processing) : " + QueryManager.executionTime + QueryManager.preProcessingTime + " ms");
+			bw.write("Execution Time(+Pre-processing) : " + (QueryManager.executionTime + QueryManager.preProcessingTime) + " ms");
+			bw.newLine();
+			bw.write("Execution Time(+Pre-processing) : " + QueryManager.preProcessingTime + " ms");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

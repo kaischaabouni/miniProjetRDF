@@ -46,7 +46,6 @@ public class QueryManager {
 	public static long preProcessingTime;
 	public static long executionTime;
 
-
 	/**
 	 * Execute Queries in files in directory
 	 */
@@ -145,8 +144,35 @@ public class QueryManager {
 		BufferedWriter bufferedWriterResult;
 		try {
 			bufferedWriterResult = new BufferedWriter(new FileWriter(RESULT_FILE_NAME));
+			//temp
+			BufferedWriter queriesByAnswersWriterLess = new BufferedWriter(new FileWriter("lessThan30"));
+			BufferedWriter queriesByAnswersWriterMore = new BufferedWriter(new FileWriter("moreThan30"));
+			
+			System.out.println("for" + allSerializedQueries.size());
+			for(int i=0; i<allSerializedQueries.size(); i++)
+			{
+				//temp writing by number of answers
+				if(queriesStatus.get(i).numberOfAnswers()<=30)
+					{
+					queriesByAnswersWriterLess.write(allSerializedQueries.get(i));
+					queriesByAnswersWriterLess.newLine();
+					}
+				else
+					if(queriesStatus.get(i).numberOfAnswers()<=70)
+					{
+					queriesByAnswersWriterMore.write(allSerializedQueries.get(i));
+					queriesByAnswersWriterMore.newLine();
+					}
+				
+				
+				//
+			}
+			queriesByAnswersWriterLess.close();
+			queriesByAnswersWriterMore.close();
+			//
 			for(QueryStatus queryStatus: queriesStatus){
 				writeResult(bufferedWriterResult, queryStatus);
+			
 				
 			}
 			//temp code, ntriples calc
@@ -342,5 +368,8 @@ public class QueryManager {
 		}
 		bufferedWriter.write("---------------------------------------------------------------");
 		bufferedWriter.newLine();
+		
+		
+		
 	}
 }

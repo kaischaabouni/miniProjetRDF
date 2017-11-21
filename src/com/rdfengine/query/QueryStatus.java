@@ -52,6 +52,11 @@ public class QueryStatus {
 		return queryResult;
 	}
 
+	public int numberOfAnswers()
+	{
+		return queryResult.size();
+	}
+	
 	public void setQueryResult(ArrayList<Integer> queryResult) {
 		this.queryResult = queryResult;
 	}
